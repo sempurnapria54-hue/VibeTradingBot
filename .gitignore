@@ -1,5 +1,7 @@
 HELP.md
 target/
+.env
+src/main/java/com/example/tradingbot/persistence/jooq/generated/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

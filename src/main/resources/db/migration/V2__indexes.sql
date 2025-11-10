@@ -1,0 +1,11 @@
+CREATE INDEX IF NOT EXISTS idx_exchange_instrument_exchange_symbol ON exchange_instrument (exchange_id, client_symbol);
+CREATE INDEX IF NOT EXISTS idx_exchange_instrument_exchange_instrument ON exchange_instrument (exchange_id, instrument_id);
+CREATE INDEX IF NOT EXISTS idx_history_group_exchange_tf ON history_group (exchange_instrument_id, timeframe_canonical);
+CREATE INDEX IF NOT EXISTS idx_candles_group_ts ON candles (history_group_id, timestamp_utc);
+CREATE INDEX IF NOT EXISTS idx_candles_ts_brin ON candles USING BRIN (timestamp_utc);
+CREATE INDEX IF NOT EXISTS idx_indicator_params_lookup ON indicator_params (type, timeframe_canonical, version);
+CREATE INDEX IF NOT EXISTS idx_signal_params_lookup ON signal_params (type, timeframe_canonical, version);
+CREATE INDEX IF NOT EXISTS idx_quorum_params_version ON quorum_params (version);
+CREATE INDEX IF NOT EXISTS idx_risk_params_version ON risk_params (version);
+CREATE INDEX IF NOT EXISTS idx_exchange_params_exchange_active ON exchange_params (exchange_id, is_active);
+CREATE INDEX IF NOT EXISTS idx_indicator_checkpoint_unique ON indicator_checkpoint (indicator, history_group_id, indicator_params_id, version);

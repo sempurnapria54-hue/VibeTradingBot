@@ -1,13 +1,12 @@
-package com.example.vibetradingbot;
+package com.example.tradingbot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VibeTradingBotApplication {
+public class TradingBotApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(VibeTradingBotApplication.class, args);
+        SpringApplication.run(TradingBotApplication.class, args);
     }
-
 }

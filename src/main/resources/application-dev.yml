@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tradingbot
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    com.example.tradingbot: DEBUG
+
+security:
+  jwt:
+    public-key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm8TPKAOhr4GALz3hPpi5
+      Nslt7gHDERuI4y457pEPSI3cYQWVtfvoYlew69C0Y/ZPpvcBvHuK9kyo3PZxBjbC
+      rg9REvCerqsJATryz0z4cIvoIHdjbg/ZVsdXpAYw4Lfmwk3nJhkYxtHZgPaMTXq8
+      M/ZhA6X+p4MIY4rhDnJs0LXoHa6/45da0YAjm6QBtheEAfJ0Orc6lKC/IiczBdGq
+      9Ry1O7pSzWwJ5+GAdiNWu28LJ+gDDtdHs9S+FkEKBCBg85tJDciXgb56cHKgJMUk
+      /1URuEMWhQQXqVZK756s/M2x72o2QON1sYsFZdQ8W2/kNqs3AR+JNF9tN06NEIxH
+      /wIDAQAB
+      -----END PUBLIC KEY-----
+    private-key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCbxM8oA6GvgYAv
+      PeE+mLk2yW3uAcMRG4jjLjnukQ9IjdxhBZW1++hiV7Dr0LRj9k+m9wG8e4r2TKjc
+      9nEGNsKuD1ES8J6uqwkBOvLPTPhwi+ggd2NuD9lWx1ekBjDgt+bCTecmGRjG0dmA
+      9oxNerwz9mEDpf6ngwhjiuEOcmzQtegdrr/jl1rRgCObpAG2F4QB8nQ6tzqUoL8i
+      JzMF0ar1HLU7ulLNbAnn4YB2I1a7bwsn6AMO10ez1L4WQQoEIGDzm0kNyJeBvnpw
+      cqAkxST/VRG4QxaFBBepVkrvnqz8zbHvajZA43WxiwVl1Dxbb+Q2qzcBH4k0X203
+      To0QjEf/AgMBAAECggEAAec/g+TdwGW+MJWV6KNBPBt/1bm9El9e1FKqD9Yeonk/
+      kAp/7bwdm3DfSp7tJn2JxgxKLX+fhf0PqkwXu0/rjcQ0AJ2+M8Tiz+yt09jEIvEP
+      RIyTMRdyV5528AntU64t3JRdP8G1v2+aRh8PYj6xCU5c4mPio3oQeWQLY84D+123
+      nu/Dr3xtt1mPEs3LRL8N5Tz00bOOPvA6j9JXBfgfcUWqxe5CqqLs6k61PkLUbSXa
+      BE79srjh8m3cwApVYLD6zb6fEjD5uf6thT6txZWarQCvNH9hU4ub1Yzm6M/YUICW
+      ZHaXXHQg2syOzvYgJWofLIW158fURbETiWvfeAe2VQKBgQDSlx+E6r2JSjjCLGHz
+      8q8MbYjRCWOdp0r5cQlinoIRdfr2NVH/4Df5YJ/G4kYvrSbv3bvCoJraE+YXkM6u
+      f7IxlCKTMvFLm98tlc5azsE8pOtuHRwaZBEigsa+xtVIjEDGRwDU3/r2/K/b25yD
+      qYT8v9RpAKPQN4CCwlaUNwenBQKBgQC9W3YeashO3tp18DmmeBCCFOHpll1VqW7G
+      tAxCETkXB6AlCsfyjSdrogZ5uAK/QZ3YDw0gNg9Gi9SEEmyhHA2G/I16+nPDbKCu
+      ub3c/RFpPmqT0JTDENNeu6/wodfxfishWVFBKtDsG6Pp3t09H58KsqJsEQ4H1FGt
+      t6ETTOmaMwKBgQC3+Xp5vjGTTRpE2E1Ct1MiAlcyd4dlZY9kV9IhK+TpqC51BaP7
+      bEC6RiWPtIIoiJapmwa7Q1/FAPlUwRcu7zQXiBikjC6tJSFWS7eZMWMzvchHzHqO
+      u7kUczd5127hEFZOYh1h28L+H0brRfJ4O5KI1HWWvg5eiv5kPa8xkNnImQKBgQC7
+      L/j6ZLETVrY7NHipGbOoBCC3m0806UN65m3fucrn+z/Snm++VM+NVSR1mvQMQT9a
+      YLanCwnawUwaK2R7d5HfyTXLRl6951qIn1ETbpCRq4QMD3ufwbhRw9RPWo5wSjs0
+      wmjStRLG9SP6g7fNPr8oAiMSFWH7V2ZPBmITBEtBhQKBgQC+iLrQ3qaDNzGA1wYa
+      rE7yUqbNEDvowL0b9qpBC3aGThnEMlurme/+luhpgj3s7NWSl/8VyVPIZwuB8qdn
+      S4h1IvJuSG22gdjwUQdq7sW+kDhdhFkNf8wvcGq74/qcYKdRBt3mw3VtaY2JSnFa
+      WI6viTouhTKsOxO5ZkhHy9m9aA==
+      -----END PRIVATE KEY-----
+
+okx:
+  base-url: https://www.okx.com
+  api-key: ${OKX_API_KEY:demo-key}
+  secret-key: ${OKX_SECRET_KEY:demo-secret}
+  passphrase: ${OKX_PASSPHRASE:demo-pass}
+  rate-limits:
+    candles-per-second: 5
+    rest-timeout: PT5S
