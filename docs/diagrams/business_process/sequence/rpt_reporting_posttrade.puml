@@ -1,0 +1,25 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Пост-трейд отчётность и трассировка причин\n@version RPT.v1
+autonumber
+
+
+Admin -> API: GET /api/reports/trades?from..to
+API -> DB: query trades/positions/equity
+API -> DB: join quorum_decision_event -> signal_event -> indicator_values
+API --> Admin: report (P&L, expectancy, examples with reasons)
+
+
+note over API,DB
+Полная трасса: индикаторы → сигналы → кворум → решения → ордера → сделки
+end note
+@enduml

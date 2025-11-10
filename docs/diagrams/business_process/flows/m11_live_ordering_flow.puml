@@ -1,0 +1,44 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M11 — LIVE: решение → ордера → позиция
+
+
+start
+partition "LiveSession" {
+:Read latest quorum_decision_event;
+if (ENTER?) then (yes)
+:Risk check (≤1%/isolated/x10);
+:Build OrderIntent (entry+bracket);
+else (no)
+if (MODIFY/EXIT/REVERSE?) then (yes)
+:Amend/cancel or close;
+else (HOLD)
+:No‑op;
+endif
+endif
+}
+partition "OrderRouter" {
+:Place/amend via ExchangeConnector;
+}
+partition "DB" {
+:Persist live_order / position_ledger;
+}
+partition "Reconciler" {
+:Periodic reconcile (REST polling);
+if (Drift?) then (yes)
+:Append corrections;
+endif
+}
+stop
+
+
+note right
+Client‑order‑id детерминирован; один писатель на\n
+exchange_instrument×TF; WS‑филлы → леджер.
+end note
+@enduml

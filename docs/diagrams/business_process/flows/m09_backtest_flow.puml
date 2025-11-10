@@ -1,0 +1,29 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M9 — Бэктест и метрики
+
+
+start
+partition "Backtest" {
+:resolveOrCreate(backtest_params);
+:Load candles & signals;
+repeat
+:Materialize signals (latency model);
+:Simulate orders/fills/positions;
+:Append sim_* & equity;
+repeat while (bars left?)
+:Compute performance_aggregate;
+}
+stop
+
+
+note right
+Метрики: P&L, PF, Expectancy (R), MaxDD, Sharpe/Sortino;\n
+отчёты и выбор примеров трейдов с reason‑цепочкой.
+end note
+@enduml

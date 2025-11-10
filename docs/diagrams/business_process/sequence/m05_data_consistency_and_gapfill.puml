@@ -1,0 +1,29 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Целостность данных и автодокачка (M5)\n@version M5.v1
+autonumber
+
+
+Scheduler -> Consistency: scan(series window)
+Consistency -> DB: check time grid, duplicates, holes
+alt найдены дырки
+Consistency -> History: request targeted refill
+History -> ExConn: GET /market/history-candles?range=missed
+ExConn -> ExREST: запрос
+ExREST --> ExConn: candles(range)
+ExConn --> History: candles(range)
+History -> DB: INSERT candles (append-only, ON CONFLICT DO NOTHING)
+Consistency -> DB: recompute coverage (start,end)
+else чисто
+Consistency -> Metrics: consistency_ok++
+end
+@enduml

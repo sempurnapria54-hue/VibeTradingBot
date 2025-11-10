@@ -1,0 +1,47 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Go/No-Go LIVE: допуск и запуск сессии (M10→M11)\n@version LIVE.v1
+autonumber
+
+
+Admin -> API: POST /api/live/approve {exchange,instrument,tf, quorumVersion, riskRef, criteriaRef}
+API -> DB: load performance_aggregate (M9) for candidate
+API -> DB: load criteria (minTrades, maxDD, Sharpe, expectancy, winrate, …)
+API -> API: evaluate criteria
+alt meets criteria (Go)
+API -> DB: INSERT live_whitelist {exchange_instrument, tf, quorumVersion, riskRef}
+API -> Live: start session {exchange_instrument, tf, quorumVersion, riskRef}
+Live -> Risk: verify isolated/x10, ≤1% per trade
+Risk --> Live: sizing policy ok
+Live -> ExConn: setMarginMode(ISOLATED); setLeverage(≤10)
+ExConn -> ExREST: API calls
+ExREST --> ExConn: ack
+ExConn --> Live: ok
+Live -> DB: create live_session (status=RUNNING)
+Live --> API: sessionId
+API --> Admin: Approved & Started {sessionId}
+else fails criteria (No-Go)
+API --> Admin: Rejected {reasons: ["Sharpe<1.0", "trades<200", …]}
+end
+
+
+== Execution guardrails ==
+Live -> DB: read loss-streak threshold
+Live -> Live: monitor guardrails, pause if breached
+
+
+note over API,DB
+Источник прав на старт — whitelist по результатам M9\n
+и проверке критериев (настраиваемых). Любой запуск\n
+вне whitelist — запрещён.
+end note
+@enduml

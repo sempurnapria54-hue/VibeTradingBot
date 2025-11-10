@@ -1,0 +1,13 @@
+' Legend fragment as a macro (no startuml/enduml here)
+' File: docs/diagrams/business_process/_fragments/legend.puml
+
+
+!definelong BP_LEGEND()
+legend left
+<b>Условные обозначения</b>\n
+<#3B82F6>Синий</color> — обычные шаги (happy path)\n
+<#F59E0B>Оранжевый</color> — ретраи/лимиты/ограничения\n
+<#EF4444>Красный</color> — ошибки/отказы\n
+Инварианты (note over): UTC, только закрытые свечи, append-only, one-writer-per-key
+endlegend
+!enddefinelong

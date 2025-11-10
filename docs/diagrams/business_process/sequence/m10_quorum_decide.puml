@@ -1,0 +1,33 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Кворум: композитный score и решение (M10)\n@version M10.v1
+autonumber
+
+
+Scheduler -> Quorum: decide(series on TF quorum)
+Quorum -> DB: resolveOrCreate(quorum_params)
+loop по барам TF quorum
+Quorum -> DB: fetch latest signal_event per input (≤ ts)
+Quorum -> Quorum: apply gatekeepers (BLOCK/DOWNWEIGHT)
+Quorum -> Quorum: S = Σ wᵢ·scoreᵢ (с minScore фильтрами)
+alt ENTER/EXIT/REVERSE/MODIFY/HOLD
+Quorum -> DB: INSERT quorum_decision_event {action,S,inputs,filters,reco}
+end
+end
+Quorum -> Metrics: quorum_decisions_total{action}++
+
+
+note over Quorum
+Автотюнинг весов/порогов по M9 создаёт новую\n
+версию quorum_params (append-only registry)
+end note
+@enduml

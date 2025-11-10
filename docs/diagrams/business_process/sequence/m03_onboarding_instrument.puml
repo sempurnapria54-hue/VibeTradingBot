@@ -1,0 +1,46 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Onboarding инструмента/биржи (M3/M4)\n@version M3.v1
+autonumber
+
+
+Admin -> API: POST /api/onboarding {exchange, instrument, mappings, tf-canonical}
+API -> Onboarding: validate & resolve canonical TFs
+Onboarding -> DB: upsert exchange / instrument / exchange_instrument
+Onboarding -> DB: insert coverage row (start=null, end=null)
+Onboarding -> Metrics: counter:onboarding_created++
+
+
+note over Onboarding,DB
+Инварианты: канонические таймфреймы,\n
+immutability params через registry (M2)
+end note
+
+
+API --> Admin: 201 Created {exchange_instrument_id}
+
+
+== Запуск первичной докачки ==
+API -> Scheduler: schedule History download
+Scheduler -> History: downloadAll(exchange_instrument, all TF)
+loop по каждому TF (от старших к младшим)
+History -> ExConn: GET /market/history-candles
+ExConn -> ExREST: запросы с rate-limit и HMAC
+ExREST --> ExConn: candles(list)
+ExConn --> History: candles(list)
+History -> DB: INSERT candles (append-only, ON CONFLICT DO NOTHING)
+end
+History -> DB: create/refresh history_group per TF
+History -> Consistency: recalc coverage(start,end)
+Consistency -> DB: update coverage table
+History --> Scheduler: done
+@enduml

@@ -1,0 +1,52 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title LIVE: решение → ордера → позиция (M11)\n@version M11.v1
+autonumber
+
+
+Scheduler -> Live: session tick (per series)
+Live -> DB: fetch last quorum_decision_event (closed bar)
+alt action = ENTER_*
+Live -> Risk: check 1% risk, isolated/x10, loss-streak
+Risk --> Live: sizing, SL/TP/trailing
+Live -> OrderRouter: build OrderIntent (entry + bracket)
+OrderRouter -> ExConn: place order(s) with client_order_id
+ExConn -> ExREST: API call(s)
+ExREST --> ExConn: ack{external_order_id}
+ExConn --> OrderRouter: ack
+OrderRouter -> DB: persist live_order, intent
+else action = MODIFY_SLTP
+Live -> OrderRouter: amend protective orders
+OrderRouter -> ExConn: amend/cancel
+else action = EXIT/REVERSE
+Live -> OrderRouter: send close (market/limit)
+end
+
+
+== Исполнения и реконсиляция ==
+ExWS --> ExConn: fill events
+ExConn --> Live: fills
+Live -> DB: persist live_fill, position_ledger
+par periodic reconcile
+Reconciler -> ExConn: fetchOpenOrders/fetchPositions
+ExConn -> ExREST: REST polling
+ExREST --> ExConn: state
+ExConn --> Reconciler: state
+Reconciler -> DB: fix drifts (append logs)
+end
+
+
+note over Live,OrderRouter
+Идемпотентность: детерминированный client_order_id;\n
+один писатель на связку exchange_instrument×TF
+end note
+@enduml

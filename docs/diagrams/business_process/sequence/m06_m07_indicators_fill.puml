@@ -1,0 +1,40 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Расчёт значений индикаторов (M6–M7)\n@version M7.v1
+autonumber
+
+
+Scheduler -> Indicators: fill(indicator, series)
+Indicators -> DB: resolveOrCreate(indicator_params)
+alt checkpoint exists
+Indicators -> DB: read last_ts
+Indicators -> DB: load candles from last_ts+Δ
+else first run
+Indicators -> DB: load candles from coverage.start with warmup
+end
+loop bars ASC
+Indicators -> Indicators: update buffers (EMA/SMA/StdDev/…)
+alt warmup
+Indicators -> Indicators: skip persist
+else
+Indicators -> DB: INSERT into *_values (ON CONFLICT DO NOTHING)
+end
+end
+Indicators -> DB: upsert indicator_checkpoint(last_ts)
+Indicators -> Metrics: indicator_values_inserted++
+
+
+note over Indicators,DB
+Numeric policy: BigDecimal, scale из YAML;\n
+без триггеров; append-only; идемпотентные вставки
+end note
+@enduml

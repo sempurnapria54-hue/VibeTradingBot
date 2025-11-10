@@ -1,0 +1,31 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Guardrails: авто-пауза при серии убыточных (M11)\n@version M11.v1
+autonumber
+
+
+Live -> DB: read last N closed positions (series)
+Live -> Live: compute loss-streak
+alt streak >= threshold
+Live -> DB: insert guardrail_event{LOSS_STREAK_PAUSE}
+Live -> DB: update live_session.status = PAUSED
+Live -> Metrics: guardrail_trips_total++
+Live --> Admin: notify (Ops)
+else below threshold
+Live -> Live: keep running
+end
+
+
+Admin -> API: POST /api/live/session/resume {sessionId}
+API -> Live: resume session
+Live -> DB: update status = RUNNING
+@enduml

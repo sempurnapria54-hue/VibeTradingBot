@@ -1,0 +1,33 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title L0 Value Stream — от онбординга до отчётности
+
+
+start
+:Onboard exchange/instrument (M3);
+:Download & fill history coverage (M4–M5);
+:Compute indicator values (M6–M7);
+:Generate signals (M8);
+:Quorum decision (M10);
+:Backtest & metrics (M9);
+if (Meets Go/No‑Go?) then (yes)
+:Start LIVE session (M11);
+:Orders → Fills → Positions;
+:Guardrails (loss‑streak) & Reconcile;
+:Post‑trade reporting;
+else (no)
+:Tune configs/weights;
+endif
+stop
+
+
+note right
+Инварианты: UTC, только закрытые свечи, append‑only,\n
+один писатель на серию, объяснимость решений.
+end note
+@enduml

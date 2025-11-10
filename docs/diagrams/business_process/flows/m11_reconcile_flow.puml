@@ -1,0 +1,29 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M11 — Reconcile: сверка и коррекция
+
+
+start
+partition "Reconciler" {
+:fetchOpenOrders / fetchPositions / fetchFills(since);
+}
+partition "Exchange" {
+:REST polling;
+}
+partition "Reconciler" {
+:Normalize state;
+:Compare vs local DB;
+if (Drift?) then (yes)
+:Append corrections;
+:Notify Live (optional pause);
+else (no)
+:OK;
+endif
+}
+stop
+@enduml

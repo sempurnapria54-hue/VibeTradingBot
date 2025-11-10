@@ -1,0 +1,73 @@
+' ============================================================
+' Global style as a macro to avoid standalone rendering
+' File: docs/diagrams/business_process/_fragments/style.puml
+' ============================================================
+
+
+!definelong BP_STYLE()
+skinparam shadowing false
+skinparam dpi 150
+skinparam BackgroundColor #FFFFFF
+skinparam DefaultFontName "Inter, Roboto, Arial, Helvetica, sans-serif"
+skinparam DefaultMonospacedFontName "JetBrains Mono, Fira Code, Menlo, Consolas, monospace"
+skinparam HyperlinkColor #2563EB
+
+
+' ---- Sequence defaults ----
+skinparam sequenceMessageAlign center
+skinparam ArrowThickness 1.2
+
+
+skinparam Sequence {
+ArrowColor #1F2937
+LifeLineBorderColor #9CA3AF
+LifeLineBackgroundColor #F9FAFB
+ParticipantBorderColor #374151
+ParticipantBackgroundColor #FFFFFF
+ActorBorderColor #374151
+ActorBackgroundColor #FFFFFF
+GroupBorderColor #3B82F6
+GroupBackgroundColor #EBF2FE
+BoxBorderColor #3B82F6
+BoxBackgroundColor #EBF2FE
+DividerBackgroundColor #F3F4F6
+DividerBorderColor #D1D5DB
+ParticipantPadding 15
+}
+
+
+' ---- Activity / Flow ----
+skinparam activity {
+BackgroundColor #FFFFFF
+BorderColor #111827
+FontColor #111827
+StartColor #059669
+EndColor #DC2626
+DiamondBackgroundColor #FFFFFF
+DiamondBorderColor #111827
+}
+skinparam swimlane {
+BorderColor #9CA3AF
+TitleBackgroundColor #F9FAFB
+TitleFontColor #111827
+}
+skinparam Arrow {
+Color #111827
+}
+
+
+' ---- Stereotypes (cosmetics) ----
+skinparam stereotype {
+CBackgroundColor<<service>> #EEF2FF
+CBorderColor<<service>> #6366F1
+FontColor<<service>> #312E81
+
+
+CBackgroundColor<<db>> #ECFDF5
+CBorderColor<<db>> #10B981
+
+
+CBackgroundColor<<ext>> #FFF7ED
+CBorderColor<<ext>> #F59E0B
+}
+!enddefinelong

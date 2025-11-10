@@ -1,0 +1,42 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Registry: resolveOrCreate immutable *params (M2)\n@version REG.v1
+autonumber
+
+
+Admin -> API: POST /api/params/{kind} {yaml/json}
+API -> DB: canonicalize(JSON) & SELECT id FROM {kind}_params\nWHERE UNIQUE(type,timeframe_canonical,version,canonical_json)
+alt exists
+DB --> API: params_id
+else not found
+API -> DB: INSERT INTO {kind}_params (type, timeframe_canonical, version, canonical_json)
+DB --> API: params_id (new)
+end
+API --> Admin: 201 Created {params_id}
+
+
+== Использование потребителями ==
+Scheduler -> Indicators: resolveOrCreate(indicator_params)
+Indicators -> DB: SELECT/INSERT same canonical_json → params_id
+Scheduler -> Signals: resolveOrCreate(signal_params)
+Signals -> DB: SELECT/INSERT → params_id
+Scheduler -> Quorum: resolveOrCreate(quorum_params)
+Quorum -> DB: SELECT/INSERT → params_id
+Admin -> API: POST /api/backtest/run {config}
+API -> DB: resolveOrCreate(backtest_params) → params_id
+
+
+note over API,DB
+Канонизация JSON (стабильный порядок ключей, типы, без дефолтов).\n
+Все *_params — append-only, UNIQUE(type,timeframe_canonical,version,canonical_json).
+end note
+@enduml

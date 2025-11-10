@@ -1,0 +1,37 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Инкрементальная докачка истории (M4/M5)\n@version M5.v1
+autonumber
+
+
+Scheduler -> History: tick(TF series)
+History -> DB: read newest timestamp
+alt есть новые бары
+History -> ExConn: GET /market/history-candles?after=last_ts
+ExConn -> ExREST: запрос
+ExREST --> ExConn: новые свечи (закрытые)
+ExConn --> History: свечи
+History -> DB: INSERT candles (append-only)
+History -> Consistency: validate grid & duplicates
+Consistency -> DB: fix gaps if any (targeted refill)
+Consistency -> DB: update coverage
+else актуально
+History -> Metrics: gauge:lag_bars=0
+end
+History --> Scheduler: done
+
+
+note over History,Consistency
+Только закрытые свечи; каноническая сетка;\n
+один писатель на серию (exchange_instrument×TF)
+end note
+@enduml

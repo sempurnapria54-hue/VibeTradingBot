@@ -1,0 +1,28 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Реконсиляция состояний с биржей (M11)\n@version M11.v1
+autonumber
+
+
+Scheduler -> Reconciler: tick(session)
+Reconciler -> ExConn: fetchOpenOrders / fetchPositions / fetchFills(since)
+ExConn -> ExREST: REST polling
+ExREST --> ExConn: states & fills
+ExConn --> Reconciler: normalized state
+Reconciler -> DB: compare vs local; append corrections
+Reconciler -> Metrics: reconcile_drift_total++ (if drift)
+
+
+alt critical drift
+Reconciler --> Live: signal PAUSE and manual check
+end
+@enduml

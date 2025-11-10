@@ -1,0 +1,35 @@
+' Lifelines fragment as a macro (no startuml/enduml here)
+' File: docs/diagrams/business_process/_fragments/lifelines.puml
+
+
+!definelong BP_LIFELINES()
+actor Admin as Admin
+participant "REST API\n(Controllers)" as API <<service>>
+participant Scheduler as Scheduler <<service>>
+
+
+participant "OnboardingService" as Onboarding <<service>>
+participant "HistoryService" as History <<service>>
+participant "ConsistencyService" as Consistency <<service>>
+participant "IndicatorService" as Indicators <<service>>
+participant "SignalsService" as Signals <<service>>
+participant "QuorumEngine" as Quorum <<service>>
+participant "BacktestEngine" as Backtest <<service>>
+participant "LiveSession\n(Orchestrator)" as Live <<service>>
+participant "OrderRouter" as OrderRouter <<service>>
+participant "RiskEngine" as Risk <<service>>
+participant "Reconciler" as Reconciler <<service>>
+
+
+participant "ExchangeConnector\n(OKX/...)" as ExConn <<ext>>
+participant "Exchange REST" as ExREST <<ext>>
+participant "Exchange WS" as ExWS <<ext>>
+
+
+database "PostgreSQL" as DB <<db>>
+collections "Metrics/Alerts" as Metrics
+note right of Metrics
+Prometheus/Grafana,
+Alertmanager
+end note
+!enddefinelong

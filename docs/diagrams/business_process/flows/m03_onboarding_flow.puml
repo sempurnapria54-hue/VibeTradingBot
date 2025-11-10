@@ -1,0 +1,40 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M3 — Онбординг инструмента/биржи
+
+
+start
+partition "Admin" {
+:POST /api/onboarding {exchange, instrument, tf-mapping};
+}
+partition "OnboardingService" {
+:Validate config & TF mapping;
+if (Valid?) then (yes)
+:Resolve canonical TFs;
+else (no)
+:400 Bad Request;
+stop
+endif
+}
+partition "DB" {
+:UPSERT exchange;
+:UPSERT instrument;
+:UPSERT exchange_instrument;
+:INSERT coverage(start=null,end=null);
+}
+partition "Scheduler" {
+:Schedule initial history download (all TF);
+}
+stop
+
+
+note right
+Ключи: канонические таймфреймы; immutable *_params\n
+через registry (M2); без триггеров.
+end note
+@enduml

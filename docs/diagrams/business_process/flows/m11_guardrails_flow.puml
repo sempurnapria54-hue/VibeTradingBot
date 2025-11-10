@@ -1,0 +1,28 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M11 — Guardrails: авто‑пауза при серии убыточных
+
+
+start
+partition "LiveSession" {
+:Compute loss‑streak from last N positions;
+if (streak ≥ threshold?) then (yes)
+:Insert guardrail_event;
+:Pause session;
+else (no)
+:Keep running;
+endif
+}
+partition "Admin" {
+:POST /api/live/session/resume;
+}
+partition "DB" {
+:Update status = RUNNING;
+}
+stop
+@enduml

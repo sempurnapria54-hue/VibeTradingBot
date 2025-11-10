@@ -1,0 +1,37 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M6–M7 — Расчёт значений индикаторов
+
+
+start
+partition "Indicators" {
+:resolveOrCreate(indicator_params);
+}
+partition "DB" {
+:Read checkpoint or coverage.start;
+}
+partition "Indicators" {
+:Warmup buffers;
+repeat
+:Next bar (ASC);
+if (Warmup?) then (yes)
+:Skip persist;
+else (no)
+:INSERT into *_values (ON CONFLICT DO NOTHING);
+endif
+repeat while (bars left?)
+:Upsert indicator_checkpoint(last_ts);
+}
+stop
+
+
+note right
+Numeric policy: BigDecimal; scale из YAML;\n
+без триггеров; append‑only.
+end note
+@enduml

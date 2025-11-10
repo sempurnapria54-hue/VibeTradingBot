@@ -1,0 +1,28 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Бэктест: оффлайн-симуляция исполнения (M9)\n@version M9.v1
+autonumber
+
+
+Admin -> API: POST /api/backtest/run {config}
+API -> Backtest: start run
+Backtest -> DB: resolveOrCreate(backtest_params); insert backtest_run
+Backtest -> DB: load candles & signals (window)
+loop per bar
+Backtest -> Backtest: materialize signals with latency
+Backtest -> Backtest: simulate orders/fills/positions (L1..L3)
+Backtest -> DB: append sim_order/sim_fill/position_ledger/equity
+end
+Backtest -> DB: compute performance_aggregate
+Backtest --> API: runId
+API --> Admin: 202 Accepted {runId}
+@enduml

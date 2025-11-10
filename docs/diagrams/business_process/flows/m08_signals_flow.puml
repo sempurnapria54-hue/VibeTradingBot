@@ -1,0 +1,33 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M8 — Генерация сигналов
+
+
+start
+partition "Signals" {
+:resolveOrCreate(signal_params);
+:Load LTF bars window;
+repeat
+:Fetch needed indicator values (LTF/HTF ≤ ts);
+:Apply rules + debounce/cooldown;
+if (Passed?) then (yes)
+:INSERT signal_event{dir,score,reason};
+else (no)
+:Optionally INSERT filter event;
+endif
+repeat while (bars left?)
+:Upsert signal_checkpoint;
+}
+stop
+
+
+note right
+Без look‑ahead; reason — структурный JSON;\n
+score ∈ [-1..+1].
+end note
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M10→M11 — Go/No‑Go LIVE
+
+
+start
+partition "Admin" {
+:POST /api/live/approve {exchange,instrument,tf, quorumVersion, riskRef, criteriaRef};
+}
+partition "API" {
+:Load performance_aggregate (M9);
+:Load criteria;
+if (Meets criteria?) then (Go)
+:Insert into live_whitelist;
+:Start live session;
+else (No‑Go)
+:Reject with reasons;
+stop
+endif
+}
+partition "LiveSession" {
+:Set leverage & isolated;
+:Run session;
+}
+stop
+
+
+note right
+Источник прав на старт — whitelist на базе M9;\n
+любые обходы запрещены.
+end note
+@enduml

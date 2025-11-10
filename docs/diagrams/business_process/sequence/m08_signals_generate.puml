@@ -1,0 +1,37 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+!include ../_fragments/lifelines.puml
+
+
+BP_STYLE()
+BP_LIFELINES()
+BP_LEGEND()
+
+
+title Генерация сигналов (M8)\n@version M8.v1
+autonumber
+
+
+Scheduler -> Signals: generate(series, signal_type)
+Signals -> DB: resolveOrCreate(signal_params)
+Signals -> DB: read signal_checkpoint or coverage.start
+loop по барам LTF (ASC)
+Signals -> DB: read indicator values (LTF) needed
+Signals -> DB: read HTF indicators (last closed ≤ ts)
+Signals -> Signals: apply rules, debounce/cooldown
+alt passed + not filtered
+Signals -> DB: INSERT signal_event {direction,score,reason}
+else filtered/debounced
+Signals -> DB: INSERT signal_event {is_filter=true,reason} (по политике)
+end
+end
+Signals -> DB: upsert signal_checkpoint
+Signals -> Metrics: signal_events_total++
+
+
+note over Signals
+Без look-ahead; score ∈ [-1..+1];\n
+reason — структурный JSON (объяснимость)
+end note
+@enduml

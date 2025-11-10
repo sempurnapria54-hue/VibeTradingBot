@@ -1,0 +1,29 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M10 — Кворум: агрегирование и решение
+
+
+start
+partition "QuorumEngine" {
+:resolveOrCreate(quorum_params);
+repeat
+:Collect latest signals per input (≤ ts);
+:Apply gatekeepers (BLOCK/DOWNWEIGHT);
+:Compute S = Σ wᵢ·scoreᵢ;
+:Compare with thresholds;
+:INSERT quorum_decision_event{action,S,inputs,filters,reco};
+repeat while (bars left?)
+}
+stop
+
+
+note right
+Версии quorum_params обновляются по результатам M9\n
+(автотюнинг весов и порогов).
+end note
+@enduml

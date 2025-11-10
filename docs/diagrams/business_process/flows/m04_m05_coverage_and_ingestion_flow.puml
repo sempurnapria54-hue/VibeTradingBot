@@ -1,0 +1,40 @@
+@startuml
+!include ../_fragments/style.puml
+!include ../_fragments/legend.puml
+BP_STYLE()
+BP_LEGEND()
+
+
+title M4–M5 — Докачка истории и покрытие
+
+
+start
+partition "Scheduler" {
+:Tick per TF series;
+}
+partition "HistoryService" {
+:Read newest ts;
+if (Есть новые бары?) then (да)
+:Fetch closed candles (REST);
+:Insert candles (append‑only);
+else (нет)
+:Lag=0;
+endif
+}
+partition "ConsistencyService" {
+:Check grid & duplicates;
+if (Holes found?) then (yes)
+:Targeted refill range;
+:Recompute coverage(start,end);
+else (no)
+:Consistency OK;
+endif
+}
+stop
+
+
+note right
+Только закрытые свечи; один писатель на\n
+exchange_instrument×TF; идемпотентные вставки.
+end note
+@enduml
