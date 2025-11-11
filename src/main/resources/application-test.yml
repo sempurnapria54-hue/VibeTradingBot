@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vibe_trading_bot_test
+    username: postgres
+    password: postgres
+  flyway:
+    enabled: false
+security:
+  jwt:
+    secret: test-secret
