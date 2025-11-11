@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
     JwtProperties.class,
     HistoryIngestionProperties.class,
     ConsistencyProperties.class,
-    IndicatorProperties.class
+    IndicatorProperties.class,
+    SignalProperties.class
 })
 public class ProjectConfiguration {
 }
