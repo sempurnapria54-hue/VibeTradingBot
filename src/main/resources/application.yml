@@ -91,3 +91,24 @@ app:
       leverageMax: 10
       isolated: true
       riskPerTradePct: 1.0
+  execution:
+    mode: PAPER
+    requestTimeoutMs: 10000
+    maxRetries: 3
+    retryBackoffMs: 500
+    rateLimitPerSecond: 4
+  trailing:
+    enabled: true
+    atrPeriod: 14
+    trailKAtr: 1.0
+    breakevenAtR: 1.0
+  risk:
+    riskPerTradePct: 1.0
+    leverageMax: 10
+    isolated: true
+    maxConcurrentPositions: 3
+    dailyLossLimitR: 5.0
+    maxLosingStreak: 3
+  reconcile:
+    enabled: true
+    periodSec: 30
