@@ -1,5 +1,8 @@
 package com.example.vibetradingbot.persistence.repository;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,9 +60,9 @@ public class CandleRepository {
     }
 
     @Transactional
-    public void upsertCandle(Candle candle) {
+    public int insertCandle(Candle candle) {
         CandleRecordModel record = domainToPersistenceMapper.toRecord(candle);
-        dsl.insertInto(CANDLE_TABLE)
+        return dsl.insertInto(CANDLE_TABLE)
             .set(ID_FIELD, record.getId())
             .set(EXCHANGE_INSTRUMENT_FIELD, record.getExchangeInstrumentId())
             .set(TIMEFRAME_FIELD, record.getTimeframe())
@@ -72,15 +75,21 @@ public class CandleRepository {
             .set(LOW_PRICE_FIELD, record.getLowPrice())
             .set(VOLUME_FIELD, record.getVolume())
             .set(TRADES_COUNT_FIELD, record.getTradesCount())
-            .onConflict(ID_FIELD)
-            .doUpdate()
-            .set(CLOSE_PRICE_FIELD, record.getClosePrice())
-            .set(HIGH_PRICE_FIELD, record.getHighPrice())
-            .set(LOW_PRICE_FIELD, record.getLowPrice())
-            .set(VOLUME_FIELD, record.getVolume())
-            .set(TRADES_COUNT_FIELD, record.getTradesCount())
-            .set(COVERAGE_END_FIELD, record.getCoverageEndUtc())
+            .onConflict(EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD)
+            .doNothing()
             .execute();
+    }
+
+    @Transactional
+    public int insertCandles(List<Candle> candles) {
+        if (candles == null || candles.isEmpty()) {
+            return 0;
+        }
+        int inserted = 0;
+        for (Candle candle : candles) {
+            inserted += insertCandle(candle);
+        }
+        return inserted;
     }
 
     @Transactional
@@ -123,5 +132,104 @@ public class CandleRepository {
         recordModel.setComplete(result.get(COMPLETE_FIELD));
         recordModel.setUpdatedAt(result.get(UPDATED_AT_FIELD));
         return Optional.of(persistenceToDomainMapper.toCoverage(recordModel));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Candle> findLatestCandle(UUID exchangeInstrumentId, CanonicalTimeframe timeframe) {
+        Record record = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
+                    COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
+                    VOLUME_FIELD, TRADES_COUNT_FIELD)
+            .from(CANDLE_TABLE)
+            .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId)
+                .and(TIMEFRAME_FIELD.eq(timeframe.name())))
+            .orderBy(OPEN_TIME_FIELD.desc())
+            .limit(1)
+            .fetchOne();
+        if (record == null) {
+            return Optional.empty();
+        }
+        return Optional.of(mapCandle(record));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Candle> findEarliestCandle(UUID exchangeInstrumentId, CanonicalTimeframe timeframe) {
+        Record record = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
+                    COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
+                    VOLUME_FIELD, TRADES_COUNT_FIELD)
+            .from(CANDLE_TABLE)
+            .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId)
+                .and(TIMEFRAME_FIELD.eq(timeframe.name())))
+            .orderBy(OPEN_TIME_FIELD.asc())
+            .limit(1)
+            .fetchOne();
+        if (record == null) {
+            return Optional.empty();
+        }
+        return Optional.of(mapCandle(record));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Candle> findCandlesBetween(UUID exchangeInstrumentId, CanonicalTimeframe timeframe, java.time.Instant from,
+            java.time.Instant to) {
+        List<Record> records = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
+                    COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
+                    VOLUME_FIELD, TRADES_COUNT_FIELD)
+            .from(CANDLE_TABLE)
+            .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId)
+                .and(TIMEFRAME_FIELD.eq(timeframe.name()))
+                .and(OPEN_TIME_FIELD.ge(from))
+                .and(OPEN_TIME_FIELD.lt(to)))
+            .orderBy(OPEN_TIME_FIELD.asc())
+            .fetch();
+        if (records == null || records.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Candle> candles = new ArrayList<>();
+        for (Record record : records) {
+            candles.add(mapCandle(record));
+        }
+        return candles;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CandleCoverage> findAllCoverage(UUID exchangeInstrumentId) {
+        List<Record> records = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, COVERAGE_START_FIELD,
+                    COVERAGE_END_FIELD, COMPLETE_FIELD, UPDATED_AT_FIELD)
+            .from(COVERAGE_TABLE)
+            .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId))
+            .fetch();
+        if (records == null || records.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<CandleCoverage> coverages = new ArrayList<>();
+        for (Record record : records) {
+            CandleCoverageRecordModel recordModel = new CandleCoverageRecordModel();
+            recordModel.setId(record.get(ID_FIELD));
+            recordModel.setExchangeInstrumentId(record.get(EXCHANGE_INSTRUMENT_FIELD));
+            recordModel.setTimeframe(record.get(TIMEFRAME_FIELD));
+            recordModel.setCoverageStartUtc(record.get(COVERAGE_START_FIELD));
+            recordModel.setCoverageEndUtc(record.get(COVERAGE_END_FIELD));
+            recordModel.setComplete(record.get(COMPLETE_FIELD));
+            recordModel.setUpdatedAt(record.get(UPDATED_AT_FIELD));
+            coverages.add(persistenceToDomainMapper.toCoverage(recordModel));
+        }
+        return coverages;
+    }
+
+    private Candle mapCandle(Record record) {
+        CandleRecordModel recordModel = new CandleRecordModel();
+        recordModel.setId(record.get(ID_FIELD));
+        recordModel.setExchangeInstrumentId(record.get(EXCHANGE_INSTRUMENT_FIELD));
+        recordModel.setTimeframe(record.get(TIMEFRAME_FIELD));
+        recordModel.setOpenTimeUtc(record.get(OPEN_TIME_FIELD));
+        recordModel.setCloseTimeUtc(record.get(CLOSE_TIME_FIELD));
+        recordModel.setCoverageEndUtc(record.get(COVERAGE_END_FIELD));
+        recordModel.setOpenPrice(record.get(OPEN_PRICE_FIELD));
+        recordModel.setClosePrice(record.get(CLOSE_PRICE_FIELD));
+        recordModel.setHighPrice(record.get(HIGH_PRICE_FIELD));
+        recordModel.setLowPrice(record.get(LOW_PRICE_FIELD));
+        recordModel.setVolume(record.get(VOLUME_FIELD));
+        recordModel.setTradesCount(record.get(TRADES_COUNT_FIELD));
+        return persistenceToDomainMapper.toDomain(recordModel);
     }
 }

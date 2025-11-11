@@ -32,3 +32,14 @@ decimal:
   scale: 8
   precision: 30
   rounding-mode: HALF_UP
+app:
+  history:
+    batchLimit: 200
+    requestTimeoutMs: 10000
+    maxRetries: 3
+    retryBackoffMs: 500
+    pageDelayMs: 250
+    rateLimitPerSecond: 4
+  consistency:
+    scanWindowBars: 5000
+    refillChunkBars: 1000

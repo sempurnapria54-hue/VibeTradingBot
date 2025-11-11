@@ -6,8 +6,12 @@ import org.mapstruct.ReportingPolicy;
 
 import com.example.vibetradingbot.domain.model.Candle;
 import com.example.vibetradingbot.domain.model.CandleCoverage;
+import com.example.vibetradingbot.domain.model.Exchange;
+import com.example.vibetradingbot.domain.model.ExchangeInstrument;
 import com.example.vibetradingbot.persistence.model.CandleCoverageRecordModel;
 import com.example.vibetradingbot.persistence.model.CandleRecordModel;
+import com.example.vibetradingbot.persistence.model.ExchangeInstrumentRecordModel;
+import com.example.vibetradingbot.persistence.model.ExchangeRecordModel;
 
 /**
  * Маппер persistence моделей в доменные сущности.
@@ -26,4 +30,10 @@ public interface PersistenceToDomainMapper {
     @Mapping(target = "coverageEnd", source = "coverageEndUtc")
     @Mapping(target = "complete", source = "complete")
     CandleCoverage toCoverage(CandleCoverageRecordModel record);
+
+    @Mapping(target = "status", expression = "java(com.example.vibetradingbot.domain.enums.ExchangeStatus.valueOf(record.getStatus()))")
+    Exchange toDomain(ExchangeRecordModel record);
+
+    @Mapping(target = "active", expression = "java(Boolean.TRUE.equals(record.getActive()))")
+    ExchangeInstrument toDomain(ExchangeInstrumentRecordModel record);
 }
