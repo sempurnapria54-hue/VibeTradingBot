@@ -55,3 +55,12 @@ app:
     numeric:
       priceScale: 30
       mathRounding: HALF_UP
+  signals:
+    debounceBars: 2
+    cooldownBars: 5
+    htfFilter:
+      enabled: true
+      htf: "4 hours"
+    numeric:
+      scoreScale: 6
+      rounding: HALF_UP

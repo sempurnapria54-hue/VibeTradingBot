@@ -30,6 +30,10 @@ public final class Constants {
         public static final String INDICATOR_FILL_BB_PATH = "/api/v1/indicators/fill/bb";
         public static final String INDICATOR_FILL_OBV_PATH = "/api/v1/indicators/fill/obv";
         public static final String INDICATOR_CHECKPOINT_PATH = "/api/v1/indicators/checkpoint";
+        public static final String SIGNALS_GENERATE_PATH = "/api/v1/signals/generate";
+        public static final String SIGNALS_GENERATE_RANGE_PATH = "/api/v1/signals/generate-range";
+        public static final String SIGNALS_LATEST_PATH = "/api/v1/signals/latest";
+        public static final String SIGNALS_CHECKPOINT_PATH = "/api/v1/signals/checkpoint";
         public static final String SWAGGER_PACKAGE = "com.example.vibetradingbot.api";
         public static final String SECURITY_SCHEME_NAME = "jwt";
         public static final String SWAGGER_DOCS_PATTERN = "/v3/api-docs/**";
@@ -116,6 +120,15 @@ public final class Constants {
         public static final String BB_PERCENT_B_VALUE = "percent_b";
         public static final String BB_BANDWIDTH_VALUE = "bandwidth";
         public static final String OBV_VALUE = "obv";
+        public static final String SIGNAL_PARAMS = "signal_params";
+        public static final String SIGNAL_EVENT = "signal_event";
+        public static final String SIGNAL_CHECKPOINT = "signal_checkpoint";
+        public static final String SIGNAL_TYPE = "signal_type";
+        public static final String DIRECTION = "direction";
+        public static final String SCORE = "score";
+        public static final String REASON = "reason";
+        public static final String TS_UTC = "ts_utc";
+        public static final String SIGNAL_PARAMS_ID = "signal_params_id";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -127,6 +140,7 @@ public final class Constants {
         public static final String EXCHANGE_INSTRUMENT = "exchange_instrument";
         public static final String INSTRUMENT = "instrument";
         public static final String INDICATOR = "indicator";
+        public static final String SIGNAL = "signal";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -176,6 +190,7 @@ public final class Constants {
         public static final String CONSISTENCY_SCAN_COMPLETED = "Сканирование целостности выполнено.";
         public static final String CONSISTENCY_FILL_COMPLETED = "Докачка пропусков инициирована.";
         public static final String INDICATOR_FILL_ACCEPTED = "Расчёт индикатора инициирован.";
+        public static final String SIGNAL_GENERATION_ACCEPTED = "Генерация сигналов инициирована.";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -198,6 +213,7 @@ public final class Constants {
         public static final String HISTORY_PREFIX = "app.history";
         public static final String CONSISTENCY_PREFIX = "app.consistency";
         public static final String INDICATORS_PREFIX = "app.indicators";
+        public static final String SIGNALS_PREFIX = "app.signals";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -229,5 +245,9 @@ public final class Constants {
         public static final String INDICATOR_OBV_INSERTED = "indicators.obv.values.inserted";
         public static final String INDICATOR_OBV_CHECKPOINT_UPDATED = "indicators.obv.checkpoint.updated";
         public static final String INDICATOR_OBV_SKIPPED_WARMUP = "indicators.obv.skipped.warmup";
+        public static final String SIGNALS_GENERATED_TOTAL = "signals.generated.total";
+        public static final String SIGNALS_DEBOUNCE_SKIP = "signals.debounce.skip";
+        public static final String SIGNALS_COOLDOWN_SKIP = "signals.cooldown.skip";
+        public static final String SIGNALS_CHECKPOINT_UPDATED = "signals.checkpoint.updated";
     }
 }
