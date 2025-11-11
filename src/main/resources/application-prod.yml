@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/vibe_trading_bot
+    username: vibe_trading_bot
+    password: ${DB_PASSWORD}
+  flyway:
+    enabled: true
+security:
+  jwt:
+    secret: ${SECURITY_JWT_SECRET}

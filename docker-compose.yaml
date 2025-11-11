@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: vibe_trading_bot_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vibe_trading_bot
+      POSTGRES_USER: vibe_trading_bot
+      POSTGRES_PASSWORD: vibe_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "vibe_trading_bot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  db-data:
+    driver: local

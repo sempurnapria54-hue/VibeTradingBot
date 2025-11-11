@@ -1,0 +1,36 @@
+canonical-timeframes:
+  - code: M1
+    minutes: 1
+    exchanges:
+      okx: 1m
+      binance: 1m
+  - code: M5
+    minutes: 5
+    exchanges:
+      okx: 5m
+      binance: 5m
+  - code: M15
+    minutes: 15
+    exchanges:
+      okx: 15m
+      binance: 15m
+  - code: M30
+    minutes: 30
+    exchanges:
+      okx: 30m
+      binance: 30m
+  - code: H1
+    minutes: 60
+    exchanges:
+      okx: 1H
+      binance: 1h
+  - code: H4
+    minutes: 240
+    exchanges:
+      okx: 4H
+      binance: 4h
+  - code: D1
+    minutes: 1440
+    exchanges:
+      okx: 1D
+      binance: 1d
