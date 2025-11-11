@@ -1,19 +1,5 @@
 package com.example.vibetradingbot.persistence.repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Record;
-import org.jooq.Table;
-import org.jooq.impl.DSL;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.vibetradingbot.domain.enums.CanonicalTimeframe;
 import com.example.vibetradingbot.domain.model.Candle;
 import com.example.vibetradingbot.domain.model.CandleCoverage;
@@ -22,6 +8,19 @@ import com.example.vibetradingbot.persistence.mapper.PersistenceToDomainMapper;
 import com.example.vibetradingbot.persistence.model.CandleCoverageRecordModel;
 import com.example.vibetradingbot.persistence.model.CandleRecordModel;
 import com.example.vibetradingbot.util.Constants;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.Record;
+import org.jooq.Table;
+import org.jooq.impl.DSL;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Репозиторий операций над свечами через jOOQ.
@@ -53,7 +52,7 @@ public class CandleRepository {
     private final PersistenceToDomainMapper persistenceToDomainMapper;
 
     public CandleRepository(DSLContext dsl, DomainToPersistenceMapper domainToPersistenceMapper,
-            PersistenceToDomainMapper persistenceToDomainMapper) {
+                            PersistenceToDomainMapper persistenceToDomainMapper) {
         this.dsl = dsl;
         this.domainToPersistenceMapper = domainToPersistenceMapper;
         this.persistenceToDomainMapper = persistenceToDomainMapper;
@@ -137,8 +136,8 @@ public class CandleRepository {
     @Transactional(readOnly = true)
     public Optional<Candle> findLatestCandle(UUID exchangeInstrumentId, CanonicalTimeframe timeframe) {
         Record record = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
-                    COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
-                    VOLUME_FIELD, TRADES_COUNT_FIELD)
+                COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
+                VOLUME_FIELD, TRADES_COUNT_FIELD)
             .from(CANDLE_TABLE)
             .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId)
                 .and(TIMEFRAME_FIELD.eq(timeframe.name())))
@@ -154,8 +153,8 @@ public class CandleRepository {
     @Transactional(readOnly = true)
     public Optional<Candle> findEarliestCandle(UUID exchangeInstrumentId, CanonicalTimeframe timeframe) {
         Record record = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
-                    COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
-                    VOLUME_FIELD, TRADES_COUNT_FIELD)
+                COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
+                VOLUME_FIELD, TRADES_COUNT_FIELD)
             .from(CANDLE_TABLE)
             .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId)
                 .and(TIMEFRAME_FIELD.eq(timeframe.name())))
@@ -170,10 +169,10 @@ public class CandleRepository {
 
     @Transactional(readOnly = true)
     public List<Candle> findCandlesBetween(UUID exchangeInstrumentId, CanonicalTimeframe timeframe, java.time.Instant from,
-            java.time.Instant to) {
-        List<Record> records = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
-                    COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
-                    VOLUME_FIELD, TRADES_COUNT_FIELD)
+                                           java.time.Instant to) {
+        var records = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, OPEN_TIME_FIELD, CLOSE_TIME_FIELD,
+                COVERAGE_END_FIELD, OPEN_PRICE_FIELD, CLOSE_PRICE_FIELD, HIGH_PRICE_FIELD, LOW_PRICE_FIELD,
+                VOLUME_FIELD, TRADES_COUNT_FIELD)
             .from(CANDLE_TABLE)
             .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId)
                 .and(TIMEFRAME_FIELD.eq(timeframe.name()))
@@ -193,8 +192,8 @@ public class CandleRepository {
 
     @Transactional(readOnly = true)
     public List<CandleCoverage> findAllCoverage(UUID exchangeInstrumentId) {
-        List<Record> records = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, COVERAGE_START_FIELD,
-                    COVERAGE_END_FIELD, COMPLETE_FIELD, UPDATED_AT_FIELD)
+        var records = dsl.select(ID_FIELD, EXCHANGE_INSTRUMENT_FIELD, TIMEFRAME_FIELD, COVERAGE_START_FIELD,
+                COVERAGE_END_FIELD, COMPLETE_FIELD, UPDATED_AT_FIELD)
             .from(COVERAGE_TABLE)
             .where(EXCHANGE_INSTRUMENT_FIELD.eq(exchangeInstrumentId))
             .fetch();

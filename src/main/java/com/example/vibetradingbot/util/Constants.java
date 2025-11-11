@@ -85,6 +85,7 @@ public final class Constants {
     public static final class Fields {
 
         public static final String EXCHANGE = "exchange";
+        public static final String EXCHANGE_PARAMS_ID = "exchange_params_id";
         public static final String INSTRUMENT = "instrument";
         public static final String EXCHANGE_INSTRUMENT = "exchange_instrument";
         public static final String CANDLE = "candle";
@@ -154,6 +155,7 @@ public final class Constants {
         public static final String DIRECTION = "direction";
         public static final String SCORE = "score";
         public static final String REASON = "reason";
+        public static final String SIGNAL_ID = "signal_id";
         public static final String TS_UTC = "ts_utc";
         public static final String ACTION = "action";
         public static final String THRESHOLD_ENTER = "threshold_enter";
@@ -293,6 +295,7 @@ public final class Constants {
         public static final String NULL_IDENTIFIER = "Идентификатор не может быть пустым.";
         public static final String NULL_TIMEFRAME = "Таймфрейм не может быть пустым.";
         public static final String UNKNOWN_TIMEFRAME = "Неизвестный таймфрейм.";
+        public static final String CONFIGURATION_ERROR = "Ошибка конфигурации.";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

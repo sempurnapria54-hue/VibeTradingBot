@@ -6,7 +6,7 @@
 
 ## 0) Рантайм и базовый стек
 
-- **Java**: 25
+- **Java**: 21
 - **Spring Boot**: 3.5.x (Spring 6.2.x)
 - **DB**: PostgreSQL 15+ (локально через Testcontainers; в проде — контейнер из `docker-compose.yml`)
 - **Зависимости**:

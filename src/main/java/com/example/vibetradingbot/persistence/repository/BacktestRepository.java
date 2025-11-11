@@ -249,7 +249,7 @@ public class BacktestRepository {
 
     @Transactional(readOnly = true)
     public List<BacktestEquityPoint> findEquity(long runId) {
-        List<Record> records = dsl.select(ID_FIELD, RUN_ID_FIELD, EQUITY_TS_FIELD, EQUITY_VALUE_FIELD)
+        var records = dsl.select(ID_FIELD, RUN_ID_FIELD, EQUITY_TS_FIELD, EQUITY_VALUE_FIELD)
             .from(BACKTEST_EQUITY_TABLE)
             .where(RUN_ID_FIELD.eq(runId))
             .orderBy(EQUITY_TS_FIELD.asc())
@@ -274,7 +274,7 @@ public class BacktestRepository {
         int safeSize = Math.max(size, 1);
         int safePage = Math.max(page, 0);
         int offset = safePage * safeSize;
-        List<Record> records = dsl.select(ID_FIELD, RUN_ID_FIELD, SIGNAL_ID_FIELD, ENTRY_TS_FIELD, EXIT_TS_FIELD,
+        var records = dsl.select(ID_FIELD, RUN_ID_FIELD, SIGNAL_ID_FIELD, ENTRY_TS_FIELD, EXIT_TS_FIELD,
                 SIDE_FIELD, ENTRY_PRICE_FIELD, EXIT_PRICE_FIELD, PNL_FIELD, FEES_FIELD, SLIPPAGE_FIELD, FUNDING_FIELD,
                 MAE_FIELD, MFE_FIELD, WHICH_HIT_FIELD, TIME_TO_EVENT_FIELD, REASON_FIELD)
             .from(BACKTEST_TRADE_TABLE)

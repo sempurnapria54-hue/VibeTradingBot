@@ -230,6 +230,6 @@ public class OkxExecutionAdapter implements ExecutionAdapter {
                 Instant.now().toEpochMilli(),
                 Instant.now());
         });
-        meterRegistry.gaugeCollectionSize(Constants.Metrics.LIVE_POSITION_SIZE, positions.entrySet());
+//        meterRegistry.gaugeCollectionSize(Constants.Metrics.LIVE_POSITION_SIZE, positions.entrySet());
     }
 }

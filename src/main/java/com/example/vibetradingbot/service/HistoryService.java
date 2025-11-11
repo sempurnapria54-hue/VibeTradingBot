@@ -54,8 +54,8 @@ public class HistoryService {
     private final ConcurrentMap<String, AtomicLong> lagGauges = new ConcurrentHashMap<>();
 
     public HistoryService(HistoryIngestionProperties properties, ExchangeInstrumentRepository exchangeInstrumentRepository,
-            ExchangeRepository exchangeRepository, ExchangeConnectorRegistry exchangeConnectorRegistry,
-            CandleRepository candleRepository, ClientCandleMapper clientCandleMapper, MeterRegistry meterRegistry) {
+                          ExchangeRepository exchangeRepository, ExchangeConnectorRegistry exchangeConnectorRegistry,
+                          CandleRepository candleRepository, ClientCandleMapper clientCandleMapper, MeterRegistry meterRegistry) {
         this.properties = properties;
         this.exchangeInstrumentRepository = exchangeInstrumentRepository;
         this.exchangeRepository = exchangeRepository;
@@ -92,7 +92,7 @@ public class HistoryService {
         Instant toInclusive = Instant.now();
 
         List<ClientCandle> clientCandles = invokeConnector(connector, exchange.getCode(), exchangeInstrument, timeframe,
-                fromExclusive, toInclusive);
+            fromExclusive, toInclusive);
         List<Candle> candles = mapCandles(clientCandles, toInclusive);
         int inserted = candleRepository.insertCandles(candles);
         HistoryOperationResult result = updateCoverageAndBuildResult(exchangeInstrumentId, timeframe, inserted);
@@ -105,7 +105,7 @@ public class HistoryService {
 
     @Transactional
     public HistoryOperationResult refillRange(UUID exchangeInstrumentId, CanonicalTimeframe timeframe, Instant fromUtc,
-            Instant toUtc) {
+                                              Instant toUtc) {
         ExchangeInstrument exchangeInstrument = loadExchangeInstrument(exchangeInstrumentId);
         Exchange exchange = loadExchange(exchangeInstrument.getExchangeId());
         ExchangeMarketDataConnector connector = loadConnector(exchange.getCode());
@@ -113,7 +113,7 @@ public class HistoryService {
         meterRegistry.counter(Constants.Metrics.HISTORY_CALLS, createTags(exchange.getCode(), timeframe)).increment();
 
         List<ClientCandle> clientCandles = invokeConnector(connector, exchange.getCode(), exchangeInstrument, timeframe,
-                fromUtc, toUtc);
+            fromUtc, toUtc);
         List<Candle> candles = mapCandles(clientCandles, toUtc);
         int inserted = candleRepository.insertCandles(candles);
         HistoryOperationResult result = updateCoverageAndBuildResult(exchangeInstrumentId, timeframe, inserted);
@@ -145,8 +145,12 @@ public class HistoryService {
         return exchangeConnectorRegistry.getConnector(vendor);
     }
 
-    private List<ClientCandle> invokeConnector(ExchangeMarketDataConnector connector, String exchangeCode,
-            ExchangeInstrument exchangeInstrument, CanonicalTimeframe timeframe, Instant from, Instant to) {
+    private List<ClientCandle> invokeConnector(ExchangeMarketDataConnector connector,
+                                               String exchangeCode,
+                                               ExchangeInstrument exchangeInstrument,
+                                               CanonicalTimeframe timeframe,
+                                               Instant from,
+                                               Instant to) {
         try {
             return connector.loadCandles(exchangeInstrument, timeframe, from, to);
         } catch (RuntimeException exception) {
@@ -168,7 +172,7 @@ public class HistoryService {
     }
 
     private HistoryOperationResult updateCoverageAndBuildResult(UUID exchangeInstrumentId, CanonicalTimeframe timeframe,
-            long inserted) {
+                                                                long inserted) {
         Optional<CandleCoverage> existingCoverage = candleRepository.findCoverage(exchangeInstrumentId, timeframe);
         Optional<Candle> earliest = candleRepository.findEarliestCandle(exchangeInstrumentId, timeframe);
         Optional<Candle> latest = candleRepository.findLatestCandle(exchangeInstrumentId, timeframe);
@@ -181,7 +185,7 @@ public class HistoryService {
         if (Objects.nonNull(coverageStart) && Objects.nonNull(coverageEnd)) {
             UUID coverageId = existingCoverage.map(CandleCoverage::getId).orElse(UUID.randomUUID());
             CandleCoverage coverage = CandleCoverage.create(coverageId, exchangeInstrumentId, timeframe, coverageStart, coverageEnd,
-                    true, Instant.now());
+                true, Instant.now());
             candleRepository.upsertCoverage(coverage);
         }
 
@@ -213,7 +217,7 @@ public class HistoryService {
     }
 
     private String[] createTags(String exchangeCode, CanonicalTimeframe timeframe) {
-        return new String[] {
+        return new String[]{
             "exchange", exchangeCode,
             "timeframe", timeframe.name()
         };

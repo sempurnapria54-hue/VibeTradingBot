@@ -18,6 +18,7 @@ import com.example.vibetradingbot.domain.model.CanonicalTimeframeDefinition;
 public interface DomainToApiMapper {
 
     @Mapping(target = "code", expression = "java(definition.getTimeframe().name())")
+    @Mapping(source = "exchangeMappings", target = "exchanges")
     CanonicalTimeframeDto toDto(CanonicalTimeframeDefinition definition);
 
     default List<CanonicalTimeframeDto> toDtoList(Collection<CanonicalTimeframeDefinition> definitions) {
