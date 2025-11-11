@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({
     DecimalProperties.class,
     CanonicalTimeframeProperties.class,
-    JwtProperties.class
+    JwtProperties.class,
+    HistoryIngestionProperties.class,
+    ConsistencyProperties.class
 })
 public class ProjectConfiguration {
 }
