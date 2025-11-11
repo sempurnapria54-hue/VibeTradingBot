@@ -34,6 +34,10 @@ public final class Constants {
         public static final String SIGNALS_GENERATE_RANGE_PATH = "/api/v1/signals/generate-range";
         public static final String SIGNALS_LATEST_PATH = "/api/v1/signals/latest";
         public static final String SIGNALS_CHECKPOINT_PATH = "/api/v1/signals/checkpoint";
+        public static final String BACKTEST_RUN_PATH = "/api/v1/backtest/run";
+        public static final String BACKTEST_REPORT_PATH = "/api/v1/backtest/{runId}/report";
+        public static final String BACKTEST_EQUITY_PATH = "/api/v1/backtest/{runId}/equity";
+        public static final String BACKTEST_TRADES_PATH = "/api/v1/backtest/{runId}/trades";
         public static final String SWAGGER_PACKAGE = "com.example.vibetradingbot.api";
         public static final String SECURITY_SCHEME_NAME = "jwt";
         public static final String SWAGGER_DOCS_PATTERN = "/v3/api-docs/**";
@@ -129,6 +133,39 @@ public final class Constants {
         public static final String REASON = "reason";
         public static final String TS_UTC = "ts_utc";
         public static final String SIGNAL_PARAMS_ID = "signal_params_id";
+        public static final String BACKTEST_RUN = "backtest_run";
+        public static final String BACKTEST_TRADE = "backtest_trade";
+        public static final String BACKTEST_EQUITY_POINT = "backtest_equity_point";
+        public static final String PERFORMANCE_AGGREGATE = "performance_aggregate";
+        public static final String FROM_UTC = "from_utc";
+        public static final String TO_UTC = "to_utc";
+        public static final String SIGNAL_TYPES = "signal_types";
+        public static final String QUORUM_PARAMS_ID = "quorum_params_id";
+        public static final String RISK_PARAMS_ID = "risk_params_id";
+        public static final String BACKTEST_PARAMS_ID = "backtest_params_id";
+        public static final String PARAMS_JSON = "params_json";
+        public static final String RUN_ID = "run_id";
+        public static final String ENTRY_TS = "entry_ts";
+        public static final String EXIT_TS = "exit_ts";
+        public static final String SIDE = "side";
+        public static final String ENTRY_PRICE = "entry_price";
+        public static final String EXIT_PRICE = "exit_price";
+        public static final String PNL_R = "pnl_r";
+        public static final String FEES = "fees";
+        public static final String SLIPPAGE = "slippage";
+        public static final String FUNDING = "funding";
+        public static final String MAE_R = "mae_r";
+        public static final String MFE_R = "mfe_r";
+        public static final String WHICH_HIT_FIRST = "which_hit_first";
+        public static final String TIME_TO_EVENT_BARS = "time_to_event_bars";
+        public static final String EQUITY_R = "equity_r";
+        public static final String TRADES = "trades";
+        public static final String WINRATE = "winrate";
+        public static final String PROFIT_FACTOR = "profit_factor";
+        public static final String EXPECTANCY_R = "expectancy_r";
+        public static final String MAX_DRAWDOWN_R = "max_drawdown_r";
+        public static final String SHARPE = "sharpe";
+        public static final String SORTINO = "sortino";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -141,6 +178,7 @@ public final class Constants {
         public static final String INSTRUMENT = "instrument";
         public static final String INDICATOR = "indicator";
         public static final String SIGNAL = "signal";
+        public static final String BACKTEST = "backtest";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -214,6 +252,7 @@ public final class Constants {
         public static final String CONSISTENCY_PREFIX = "app.consistency";
         public static final String INDICATORS_PREFIX = "app.indicators";
         public static final String SIGNALS_PREFIX = "app.signals";
+        public static final String BACKTEST_PREFIX = "app.backtest";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -249,5 +288,13 @@ public final class Constants {
         public static final String SIGNALS_DEBOUNCE_SKIP = "signals.debounce.skip";
         public static final String SIGNALS_COOLDOWN_SKIP = "signals.cooldown.skip";
         public static final String SIGNALS_CHECKPOINT_UPDATED = "signals.checkpoint.updated";
+        public static final String BACKTEST_TRADES_TOTAL = "backtest.trades.total";
+        public static final String BACKTEST_TRADES_TP = "backtest.trades.tp";
+        public static final String BACKTEST_TRADES_SL = "backtest.trades.sl";
+        public static final String BACKTEST_TRADES_TIME = "backtest.trades.time";
+        public static final String BACKTEST_EQUITY_MAX_DD = "backtest.equity.maxdd_r";
+        public static final String BACKTEST_EQUITY_FINAL = "backtest.equity.final_r";
+        public static final String BACKTEST_RUN_DURATION = "backtest.run.duration_ms";
+        public static final String BACKTEST_RUN_BARS_PROCESSED = "backtest.run.bars_processed";
     }
 }

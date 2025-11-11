@@ -64,3 +64,24 @@ app:
     numeric:
       scoreScale: 6
       rounding: HALF_UP
+  backtest:
+    latencyBars: 1
+    slippageBps: 1.5
+    takerFeeBps: 5.0
+    fundingBpsPer8h: 0.8
+    horizons:
+      bars: [1, 3, 5, 10]
+      volAtr: [1.0, 1.5, 2.0]
+      tripleBarrier:
+        tpKatr: 1.5
+        slKatr: 1.0
+        timeBars: 5
+    trailing:
+      enabled: true
+      atrPeriod: 14
+      trailKatr: 1.0
+      breakevenAtR: 1.0
+    position:
+      leverageMax: 10
+      isolated: true
+      riskPerTradePct: 1.0

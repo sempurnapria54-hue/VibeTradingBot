@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
     HistoryIngestionProperties.class,
     ConsistencyProperties.class,
     IndicatorProperties.class,
-    SignalProperties.class
+    SignalProperties.class,
+    BacktestProperties.class
 })
 public class ProjectConfiguration {
 }
