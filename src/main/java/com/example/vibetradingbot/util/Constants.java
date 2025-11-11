@@ -39,6 +39,18 @@ public final class Constants {
         public static final String QUORUM_LATEST_PATH = "/api/v1/quorum/latest";
         public static final String QUORUM_CHECKPOINT_PATH = "/api/v1/quorum/checkpoint";
         public static final String QUORUM_PARAMS_ACTIVATE_PATH = "/api/v1/quorum/params/activate";
+        public static final String LIVE_BASE_PATH = "/api/v1/live";
+        public static final String LIVE_PLACE_PATH = "/api/v1/live/place";
+        public static final String LIVE_CANCEL_PATH = "/api/v1/live/cancel";
+        public static final String LIVE_MODIFY_PATH = "/api/v1/live/modify";
+        public static final String LIVE_ORDERS_PATH = "/api/v1/live/orders";
+        public static final String LIVE_POSITIONS_PATH = "/api/v1/live/positions";
+        public static final String LIVE_EVENTS_PATH = "/api/v1/live/events";
+        public static final String LIVE_HALT_PATH = "/api/v1/live/halt";
+        public static final String LIVE_RESUME_PATH = "/api/v1/live/resume";
+        public static final String LIVE_HALT_STATE_PATH = "/api/v1/live/halt/state";
+        public static final String LIVE_RECONCILE_RUN_PATH = "/api/v1/live/reconcile/run";
+        public static final String LIVE_CONNECTOR_HEALTH_PATH = "/api/v1/live/connector/health";
         public static final String BACKTEST_RUN_PATH = "/api/v1/backtest/run";
         public static final String BACKTEST_REPORT_PATH = "/api/v1/backtest/{runId}/report";
         public static final String BACKTEST_EQUITY_PATH = "/api/v1/backtest/{runId}/equity";
@@ -63,6 +75,10 @@ public final class Constants {
         public static final String PERSISTENCE_ERROR = "persistence.error";
         public static final String INDICATOR_PARAMS_NOT_FOUND = "indicator.params.not.found";
         public static final String INDICATOR_CONFIGURATION_ERROR = "indicator.configuration.error";
+        public static final String LIVE_ORDER_NOT_FOUND = "live.order.not.found";
+        public static final String LIVE_ORDER_REJECTED = "live.order.rejected";
+        public static final String RISK_VIOLATION = "risk.violation";
+        public static final String LIVE_HALTED = "live.halted";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -177,6 +193,24 @@ public final class Constants {
         public static final String MAX_DRAWDOWN_R = "max_drawdown_r";
         public static final String SHARPE = "sharpe";
         public static final String SORTINO = "sortino";
+        public static final String ORDER_EVENT = "order_event";
+        public static final String ORDER_STATE = "order_state";
+        public static final String FILL_EVENT = "fill_event";
+        public static final String RISK_HALT_STATE = "risk_halt_state";
+        public static final String CLIENT_ORDER_ID = "client_order_id";
+        public static final String EXCHANGE_ORDER_ID = "exchange_order_id";
+        public static final String EVENT_TYPE = "event_type";
+        public static final String PAYLOAD = "payload";
+        public static final String FILLED_QTY = "filled_qty";
+        public static final String AVG_FILL_PRICE = "avg_fill_price";
+        public static final String QTY = "qty";
+        public static final String PRICE = "price";
+        public static final String FEE = "fee";
+        public static final String SIZE = "size";
+        public static final String LEVERAGE = "leverage";
+        public static final String ISOLATED = "isolated";
+        public static final String IS_HALTED = "is_halted";
+        public static final String SCOPE = "scope";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -242,6 +276,12 @@ public final class Constants {
         public static final String INDICATOR_FILL_ACCEPTED = "Расчёт индикатора инициирован.";
         public static final String SIGNAL_GENERATION_ACCEPTED = "Генерация сигналов инициирована.";
         public static final String QUORUM_DECISION_ACCEPTED = "Расчёт кворума инициирован.";
+        public static final String LIVE_ORDER_REQUEST_ACCEPTED = "Заявка отправлена в исполнение.";
+        public static final String LIVE_ORDER_CANCEL_ACCEPTED = "Отмена заявки отправлена.";
+        public static final String LIVE_ORDER_MODIFY_ACCEPTED = "Модификация заявки отправлена.";
+        public static final String LIVE_HALT_ENABLED = "Торговля приостановлена.";
+        public static final String LIVE_HALT_DISABLED = "Торговля возобновлена.";
+        public static final String LIVE_RECONCILE_TRIGGERED = "Сверка запущена.";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -267,6 +307,10 @@ public final class Constants {
         public static final String SIGNALS_PREFIX = "app.signals";
         public static final String QUORUM_PREFIX = "app.quorum";
         public static final String BACKTEST_PREFIX = "app.backtest";
+        public static final String EXECUTION_PREFIX = "app.execution";
+        public static final String TRAILING_PREFIX = "app.trailing";
+        public static final String RISK_PREFIX = "app.risk";
+        public static final String RECONCILE_PREFIX = "app.reconcile";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -314,5 +358,22 @@ public final class Constants {
         public static final String BACKTEST_EQUITY_FINAL = "backtest.equity.final_r";
         public static final String BACKTEST_RUN_DURATION = "backtest.run.duration_ms";
         public static final String BACKTEST_RUN_BARS_PROCESSED = "backtest.run.bars_processed";
+        public static final String LIVE_ORDER_REQUESTED = "live.order.requested";
+        public static final String LIVE_ORDER_SUBMITTED = "live.order.submitted";
+        public static final String LIVE_ORDER_ACCEPTED = "live.order.accepted";
+        public static final String LIVE_ORDER_FILLED = "live.order.filled";
+        public static final String LIVE_ORDER_PARTIAL = "live.order.partial";
+        public static final String LIVE_ORDER_CANCELED = "live.order.canceled";
+        public static final String LIVE_ORDER_REJECTED = "live.order.rejected";
+        public static final String LIVE_ORDER_EXPIRED = "live.order.expired";
+        public static final String LIVE_EXCHANGE_LATENCY = "live.exchange.latency_ms";
+        public static final String LIVE_EXCHANGE_CALLS = "live.exchange.calls";
+        public static final String LIVE_EXCHANGE_RETRIES = "live.exchange.retries";
+        public static final String LIVE_POSITION_SIZE = "live.position.size";
+        public static final String LIVE_POSITION_PNL = "live.position.pnl_unrealized";
+        public static final String LIVE_RISK_HALT_ACTIVE = "live.risk.halt.active";
+        public static final String LIVE_RISK_VIOLATIONS = "live.risk.violations";
+        public static final String LIVE_RECONCILE_FIXED = "live.reconcile.fixed";
+        public static final String LIVE_RECONCILE_DISCREPANCIES = "live.reconcile.discrepancies";
     }
 }

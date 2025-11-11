@@ -16,7 +16,11 @@ import org.springframework.context.annotation.Configuration;
     IndicatorProperties.class,
     SignalProperties.class,
     QuorumProperties.class,
-    BacktestProperties.class
+    BacktestProperties.class,
+    ExecutionProperties.class,
+    TrailingProperties.class,
+    RiskProperties.class,
+    ReconcileProperties.class
 })
 public class ProjectConfiguration {
 }
