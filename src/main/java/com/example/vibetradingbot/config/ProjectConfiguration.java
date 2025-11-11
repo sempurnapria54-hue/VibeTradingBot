@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Configuration;
     CanonicalTimeframeProperties.class,
     JwtProperties.class,
     HistoryIngestionProperties.class,
-    ConsistencyProperties.class
+    ConsistencyProperties.class,
+    IndicatorProperties.class
 })
 public class ProjectConfiguration {
 }
