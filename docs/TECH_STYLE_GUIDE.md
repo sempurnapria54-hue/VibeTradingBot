@@ -64,6 +64,7 @@
 - **Значения индикаторов** и **оценки бэктеста** — append‑only, `UNIQUE(candle_id, indicator_params_id, version)`.
 - Mutable‑исключения: `indicator_checkpoint`, `order`, `order_fill`, `position_state`.
 - Индексы: `instrument_id`, `exchange_id`, `timeframe`, `timestamp`. Партиции по (instrument, timeframe)/датам.
+- Миграции должны быть многоразовыми и не вызывать ошибок при повторном выполнении.
 
 ---
 
