@@ -312,3 +312,138 @@ int rows = dsl.update(T)
 - Все даты/время — UTC. Источник цены для индикаторов (Close/HL2/HLC3/OHLC4) фиксируется и включается в канонический JSON параметров.
 - Для больших выгрузок — курсоры/стрим, не грузить всё в память.
 - README проекта — держать актуальные версии Java/Spring/jOOQ/Gradle/Maven.
+
+
+# Дополнение к TECH_STYLE_GUIDE
+
+> Вставьте этот блок **в самый конец существующего `TECH_STYLE_GUIDE.md`**. Он дополняет гайд новыми требованиями.
+
+## 🔧 Новые обязательные правила
+
+### 1) Комментарии в миграциях (обязательно на всё)
+
+* Для **каждой таблицы и каждого поля**: `COMMENT ON TABLE ... IS '...'` и `COMMENT ON COLUMN ... IS '...'` с осмысленным описанием (назначение, единицы, диапазоны, инварианты, ссылки на бизнес‑термины).
+* Пример:
+
+  ```sql
+  COMMENT ON TABLE candles IS 'Свечи (только закрытые), UTC. Канонический таймфрейм.';
+  COMMENT ON COLUMN candles.ts_utc IS 'Метка закрытия свечи в UTC.';
+  COMMENT ON COLUMN candles.open_price IS 'Цена открытия; NUMERIC(scale из конфига).';
+  ```
+
+### 2) Javadoc в persistence‑моделях
+
+* На **класс и на каждое поле** persistence‑модели — краткий Javadoc (назначение, единицы/scale, инварианты). Пример:
+
+  ```java
+  /** Представление строки таблицы candles. Только закрытые свечи, UTC. */
+  public class CandleRow {
+    /** Метка закрытия (UTC). */
+    private Instant tsUtc;
+  }
+  ```
+
+### 3) Аннотации полей — на строке выше
+
+* Любые аннотации (валидация, сериализация и т.д.) размещаем **на строке выше поля**, а не в одной строке.
+
+### 4) Строки → константы/enum. Единый `util/Constants.java`
+
+* Все повторяющиеся/семантические **строки** выносим в константы.
+* Для ограниченных доменных наборов — **enum** (напр. статус).
+* Храним константы в одном классе `util/Constants.java` с вложенными классами по доменам:
+
+  ```java
+  public final class Constants {
+    public static final class Errors {
+      public static final String INSUFFICIENT_BALANCE = "insufficient.balance";
+      public static final String ORDER_REJECTED_EXCHANGE = "order.rejected.exchange";
+      private Errors() {}
+    }
+    public static final class Api { public static final String X_CORRELATION_ID = "X-Correlation-Id"; private Api() {} }
+    public static final class Fields { public static final class Candle { public static final String TS_UTC = "ts_utc"; private Candle() {} } private Fields() {} }
+    private Constants() {}
+  }
+  ```
+
+### 5) Enum вместо строк для ограниченных значений
+
+* Например, `OrderStatus`, `CanonicalTimeframe` и пр.
+
+### 6) Простые строки — только через константы
+
+* Никаких магических литералов в коде/аннотациях; используем `Constants.*`.
+
+### 7) Lombok вместо ручных геттеров/сеттеров/конструкторов
+
+* Если нет кастомной логики — применяем `@Data`/`@Getter`/`@Setter`/`@Builder`/`@NoArgsConstructor`/`@AllArgsConstructor`/`@With` на уровне класса.
+
+### 8) Scale/precision — из конфига, не хардкодом
+
+* Вместо проверок вроде `amount.scale() > 30` — читаем из `application.yaml` (например, `app.money.scale`).
+
+### 9–10) Коды ошибок: dot‑notation + константы
+
+* Формат: `"insufficient.balance"`, `"remote.timeout"` и т.д. — только через `Constants.Errors.*`.
+
+### 11) Исключения
+
+* Ввести 2 базовых исключения:
+
+  * `ServiceException(code, message)` — ожидаемые бизнес‑ситуации (например, не достучались до биржи). Обрабатываются и переводятся в корректный ответ.
+  * `UnexpectedException(code, message)` — критические/аномальные кейсы (например, списание с нулевого баланса). Прерывают процесс, требуют ручного разбора.
+
+### 12) Логические проверки
+
+* Вместо `!flag` → `BooleanUtils.isFalse(flag)` (если `Boolean`).
+
+### 13) Равенство
+
+* Вместо `a.equals(b)` → `Objects.equals(a, b)`.
+
+### 14) Коллекции
+
+* Вместо `items == null || items.isEmpty()` → `CollectionUtils.isEmpty(items)` / `CollectionUtils.isNotEmpty(items)`.
+
+### 15) MapStruct — декларативно, имплементации при билде
+
+* Совпадающие поля маппятся без аннотаций.
+* Расхождения/игнор — через `@Mapping`/`ignore = true`.
+* Включить `unmappedTargetPolicy = ReportingPolicy.ERROR`.
+* Пример:
+
+  ```java
+  @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+  public interface CandleMapper {
+    Candle toDomain(CandleRow row);
+    @Mapping(target = "id", ignore = true)
+    CandleRow toRow(Candle d);
+  }
+  ```
+
+### 16) Null‑проверки
+
+* Вместо `a == null`/`a != null` используем `Objects.isNull(a)`/`Objects.nonNull(a)`.
+
+---
+
+## 🧩 Напоминание по БД и миграциям
+
+* **Без триггеров.**
+* Все MIGRATION SQL содержат комментарии на все сущности/поля.
+* Именование индексов: `pk_*`, `uk_*`, `ix_*` (snake_case).
+* `coverage_start_utc` и `coverage_end_utc` — обязательны для серий.
+
+---
+
+## 📌 Пример вставки в конфиг (scale/precision)
+
+```yaml
+app:
+  money:
+    scale: 30
+    rounding: HALF_UP
+  volume:
+    scale: 12
+```
+---
