@@ -23,6 +23,13 @@ public final class Constants {
         public static final String COVERAGE_PATH = "/api/v1/coverage";
         public static final String CONSISTENCY_SCAN_PATH = "/api/v1/consistency/scan";
         public static final String CONSISTENCY_FILL_MISSING_PATH = "/api/v1/consistency/fill-missing";
+        public static final String INDICATOR_FILL_EMA_PATH = "/api/v1/indicators/fill/ema";
+        public static final String INDICATOR_FILL_MACD_PATH = "/api/v1/indicators/fill/macd";
+        public static final String INDICATOR_FILL_RSI_PATH = "/api/v1/indicators/fill/rsi";
+        public static final String INDICATOR_FILL_STOCH_PATH = "/api/v1/indicators/fill/stoch";
+        public static final String INDICATOR_FILL_BB_PATH = "/api/v1/indicators/fill/bb";
+        public static final String INDICATOR_FILL_OBV_PATH = "/api/v1/indicators/fill/obv";
+        public static final String INDICATOR_CHECKPOINT_PATH = "/api/v1/indicators/checkpoint";
         public static final String SWAGGER_PACKAGE = "com.example.vibetradingbot.api";
         public static final String SECURITY_SCHEME_NAME = "jwt";
         public static final String SWAGGER_DOCS_PATTERN = "/v3/api-docs/**";
@@ -41,6 +48,8 @@ public final class Constants {
         public static final String REMOTE_TIMEOUT = "remote.timeout";
         public static final String REMOTE_RATE_LIMIT = "remote.rate.limit";
         public static final String PERSISTENCE_ERROR = "persistence.error";
+        public static final String INDICATOR_PARAMS_NOT_FOUND = "indicator.params.not.found";
+        public static final String INDICATOR_CONFIGURATION_ERROR = "indicator.configuration.error";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -51,6 +60,14 @@ public final class Constants {
         public static final String EXCHANGE_INSTRUMENT = "exchange_instrument";
         public static final String CANDLE = "candle";
         public static final String COVERAGE = "candle_coverage";
+        public static final String INDICATOR_PARAMS = "indicator_params";
+        public static final String INDICATOR_CHECKPOINT = "indicator_checkpoint";
+        public static final String EMA_VALUES = "ema_values";
+        public static final String MACD_VALUES = "macd_values";
+        public static final String RSI_VALUES = "rsi_values";
+        public static final String STOCH_VALUES = "stoch_values";
+        public static final String BB_VALUES = "bb_values";
+        public static final String OBV_VALUES = "obv_values";
         public static final String ID = "id";
         public static final String CODE = "code";
         public static final String NAME = "name";
@@ -78,6 +95,27 @@ public final class Constants {
         public static final String LOW_PRICE = "low_price";
         public static final String IS_COMPLETE = "is_complete";
         public static final String IS_ACTIVE = "is_active";
+        public static final String INDICATOR = "indicator";
+        public static final String VERSION = "version";
+        public static final String TIMEFRAME_CANONICAL = "timeframe_canonical";
+        public static final String CANONICAL_JSON = "canonical_json";
+        public static final String INDICATOR_PARAMS_ID = "indicator_params_id";
+        public static final String CANDLE_ID = "candle_id";
+        public static final String LAST_TS = "last_ts";
+        public static final String PERIOD = "period";
+        public static final String EMA_VALUE = "ema_value";
+        public static final String MACD_VALUE = "macd";
+        public static final String SIGNAL_VALUE = "signal";
+        public static final String HISTOGRAM_VALUE = "histogram";
+        public static final String RSI_VALUE = "rsi";
+        public static final String STOCH_K_VALUE = "percent_k";
+        public static final String STOCH_D_VALUE = "percent_d";
+        public static final String BB_BASIS_VALUE = "basis";
+        public static final String BB_UPPER_VALUE = "upper";
+        public static final String BB_LOWER_VALUE = "lower";
+        public static final String BB_PERCENT_B_VALUE = "percent_b";
+        public static final String BB_BANDWIDTH_VALUE = "bandwidth";
+        public static final String OBV_VALUE = "obv";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -88,6 +126,7 @@ public final class Constants {
         public static final String EXCHANGE = "exchange";
         public static final String EXCHANGE_INSTRUMENT = "exchange_instrument";
         public static final String INSTRUMENT = "instrument";
+        public static final String INDICATOR = "indicator";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -136,6 +175,7 @@ public final class Constants {
         public static final String HISTORY_FILL_COMPLETED = "Загрузка истории завершена.";
         public static final String CONSISTENCY_SCAN_COMPLETED = "Сканирование целостности выполнено.";
         public static final String CONSISTENCY_FILL_COMPLETED = "Докачка пропусков инициирована.";
+        public static final String INDICATOR_FILL_ACCEPTED = "Расчёт индикатора инициирован.";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -157,6 +197,7 @@ public final class Constants {
         public static final String SECURITY_JWT_PREFIX = "security.jwt";
         public static final String HISTORY_PREFIX = "app.history";
         public static final String CONSISTENCY_PREFIX = "app.consistency";
+        public static final String INDICATORS_PREFIX = "app.indicators";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -170,5 +211,23 @@ public final class Constants {
         public static final String CONSISTENCY_GAPS_FOUND = "consistency.gaps.found";
         public static final String CONSISTENCY_GAPS_FILLED = "consistency.gaps.filled";
         public static final String CONSISTENCY_SCANS_TOTAL = "consistency.scans.total";
+        public static final String INDICATOR_EMA_INSERTED = "indicators.ema.values.inserted";
+        public static final String INDICATOR_EMA_CHECKPOINT_UPDATED = "indicators.ema.checkpoint.updated";
+        public static final String INDICATOR_EMA_SKIPPED_WARMUP = "indicators.ema.skipped.warmup";
+        public static final String INDICATOR_MACD_INSERTED = "indicators.macd.values.inserted";
+        public static final String INDICATOR_MACD_CHECKPOINT_UPDATED = "indicators.macd.checkpoint.updated";
+        public static final String INDICATOR_MACD_SKIPPED_WARMUP = "indicators.macd.skipped.warmup";
+        public static final String INDICATOR_RSI_INSERTED = "indicators.rsi.values.inserted";
+        public static final String INDICATOR_RSI_CHECKPOINT_UPDATED = "indicators.rsi.checkpoint.updated";
+        public static final String INDICATOR_RSI_SKIPPED_WARMUP = "indicators.rsi.skipped.warmup";
+        public static final String INDICATOR_STOCH_INSERTED = "indicators.stoch.values.inserted";
+        public static final String INDICATOR_STOCH_CHECKPOINT_UPDATED = "indicators.stoch.checkpoint.updated";
+        public static final String INDICATOR_STOCH_SKIPPED_WARMUP = "indicators.stoch.skipped.warmup";
+        public static final String INDICATOR_BB_INSERTED = "indicators.bb.values.inserted";
+        public static final String INDICATOR_BB_CHECKPOINT_UPDATED = "indicators.bb.checkpoint.updated";
+        public static final String INDICATOR_BB_SKIPPED_WARMUP = "indicators.bb.skipped.warmup";
+        public static final String INDICATOR_OBV_INSERTED = "indicators.obv.values.inserted";
+        public static final String INDICATOR_OBV_CHECKPOINT_UPDATED = "indicators.obv.checkpoint.updated";
+        public static final String INDICATOR_OBV_SKIPPED_WARMUP = "indicators.obv.skipped.warmup";
     }
 }

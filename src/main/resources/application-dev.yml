@@ -11,3 +11,16 @@ logging:
 security:
   jwt:
     secret: dev-secret-please-change
+app:
+  indicators:
+    warmupBars:
+      EMA: 100
+      MACD: 100
+      RSI: 100
+      STOCH: 100
+      BB: 100
+      OBV: 100
+    batchFlushBars: 200
+    numeric:
+      priceScale: 30
+      mathRounding: HALF_UP
