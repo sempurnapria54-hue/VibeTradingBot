@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
     ConsistencyProperties.class,
     IndicatorProperties.class,
     SignalProperties.class,
+    QuorumProperties.class,
     BacktestProperties.class
 })
 public class ProjectConfiguration {

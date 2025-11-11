@@ -34,6 +34,11 @@ public final class Constants {
         public static final String SIGNALS_GENERATE_RANGE_PATH = "/api/v1/signals/generate-range";
         public static final String SIGNALS_LATEST_PATH = "/api/v1/signals/latest";
         public static final String SIGNALS_CHECKPOINT_PATH = "/api/v1/signals/checkpoint";
+        public static final String QUORUM_DECIDE_PATH = "/api/v1/quorum/decide";
+        public static final String QUORUM_DECIDE_RANGE_PATH = "/api/v1/quorum/decide-range";
+        public static final String QUORUM_LATEST_PATH = "/api/v1/quorum/latest";
+        public static final String QUORUM_CHECKPOINT_PATH = "/api/v1/quorum/checkpoint";
+        public static final String QUORUM_PARAMS_ACTIVATE_PATH = "/api/v1/quorum/params/activate";
         public static final String BACKTEST_RUN_PATH = "/api/v1/backtest/run";
         public static final String BACKTEST_REPORT_PATH = "/api/v1/backtest/{runId}/report";
         public static final String BACKTEST_EQUITY_PATH = "/api/v1/backtest/{runId}/equity";
@@ -127,11 +132,17 @@ public final class Constants {
         public static final String SIGNAL_PARAMS = "signal_params";
         public static final String SIGNAL_EVENT = "signal_event";
         public static final String SIGNAL_CHECKPOINT = "signal_checkpoint";
+        public static final String QUORUM_DECISION_EVENT = "quorum_decision_event";
+        public static final String QUORUM_CHECKPOINT = "quorum_checkpoint";
         public static final String SIGNAL_TYPE = "signal_type";
         public static final String DIRECTION = "direction";
         public static final String SCORE = "score";
         public static final String REASON = "reason";
         public static final String TS_UTC = "ts_utc";
+        public static final String ACTION = "action";
+        public static final String THRESHOLD_ENTER = "threshold_enter";
+        public static final String THRESHOLD_EXIT = "threshold_exit";
+        public static final String POSITION_STATE = "position_state";
         public static final String SIGNAL_PARAMS_ID = "signal_params_id";
         public static final String BACKTEST_RUN = "backtest_run";
         public static final String BACKTEST_TRADE = "backtest_trade";
@@ -179,6 +190,7 @@ public final class Constants {
         public static final String INDICATOR = "indicator";
         public static final String SIGNAL = "signal";
         public static final String BACKTEST = "backtest";
+        public static final String QUORUM = "quorum";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -229,6 +241,7 @@ public final class Constants {
         public static final String CONSISTENCY_FILL_COMPLETED = "Докачка пропусков инициирована.";
         public static final String INDICATOR_FILL_ACCEPTED = "Расчёт индикатора инициирован.";
         public static final String SIGNAL_GENERATION_ACCEPTED = "Генерация сигналов инициирована.";
+        public static final String QUORUM_DECISION_ACCEPTED = "Расчёт кворума инициирован.";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -252,6 +265,7 @@ public final class Constants {
         public static final String CONSISTENCY_PREFIX = "app.consistency";
         public static final String INDICATORS_PREFIX = "app.indicators";
         public static final String SIGNALS_PREFIX = "app.signals";
+        public static final String QUORUM_PREFIX = "app.quorum";
         public static final String BACKTEST_PREFIX = "app.backtest";
     }
 
@@ -288,6 +302,10 @@ public final class Constants {
         public static final String SIGNALS_DEBOUNCE_SKIP = "signals.debounce.skip";
         public static final String SIGNALS_COOLDOWN_SKIP = "signals.cooldown.skip";
         public static final String SIGNALS_CHECKPOINT_UPDATED = "signals.checkpoint.updated";
+        public static final String QUORUM_DECISIONS_TOTAL = "quorum.decisions.total";
+        public static final String QUORUM_SCORE_RAW = "quorum.score.raw";
+        public static final String QUORUM_SCORE_FILTERED = "quorum.score.filtered";
+        public static final String QUORUM_CHECKPOINT_UPDATED = "quorum.checkpoint.updated";
         public static final String BACKTEST_TRADES_TOTAL = "backtest.trades.total";
         public static final String BACKTEST_TRADES_TP = "backtest.trades.tp";
         public static final String BACKTEST_TRADES_SL = "backtest.trades.sl";

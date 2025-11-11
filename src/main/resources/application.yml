@@ -64,6 +64,12 @@ app:
     numeric:
       scoreScale: 6
       rounding: HALF_UP
+  quorum:
+    debounceBars: 1
+    cooldownBars: 0
+    numeric:
+      scoreScale: 6
+      rounding: HALF_UP
   backtest:
     latencyBars: 1
     slippageBps: 1.5
